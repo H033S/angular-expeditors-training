@@ -1,3 +1,8 @@
+import { productsURL } from "../lib";
+import {makeSolutionBuilderHost} from "ts-loader/dist/servicesHost";
+import {types} from "sass";
+import Number = types.Number;
+
 const prefix = '🐉';
 
 type ProductType = {
@@ -6,10 +11,73 @@ type ProductType = {
   icon?: string;
 }
 
+type DifferentType =
+    string |
+    number |
+    {
+      id: number,
+      name: string
+    };
+
+function main(){
+
+  const text: DifferentType = "sun";
+  const numb: DifferentType = 3;
+  const otherObj: DifferentType = {
+    id : 3,
+    name : "Text"
+  };
+}
 
 export default async function updateOutput (id: string) {
-  //TODO
+
+  const products = await getProducts();
+  const output = document.querySelector(`#${id}`);
+  const html = layoutProducts(products);
+
+  if(output && html){
+    output.innerHTML = html;
+  }
 }
+
+async function getProducts() {
+   
+  const response: Response = await fetch(productsURL);
+  const products: ProductType[] = await response.json();
+  return products;
+}
+
+function layoutProducts(products: ProductType[]) {
+  
+  const items = products.map((product) => {
+
+    const { id, name, icon } = product;
+    const productHtml = `
+    <span class="card-id">#${id}</span>
+      <i class="card-icon ${icon} fa-lg"></i>
+    <span class="card-name">${name}</span>
+    `;
+    
+    const cardHtml = `
+    <li>
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                ${productHtml}
+                </div>
+            </div>
+        </div>
+    </li>
+    `;
+
+    return cardHtml;
+  });
+
+  let productsHtml = `<ul>${items.join('')}</ul>`;
+  return productsHtml;
+}
+
+
 
 runTheLearningSamples();
 
@@ -92,4 +160,65 @@ function runTheLearningSamples() {
   }
 
   displayProducts(sampleProducts);
+
+  const getRandomInt = (max: number = 10) => Math.floor(Math.random() * max);
+
+  function createProduct(name: string, icon?: string){
+
+    const id = getRandomInt(1000);
+    return {
+      id, name, icon
+    };
+  }
+
+  console.log(`${prefix} Optional Parameters`);
+  const pineapple = createProduct('pineaple', 'pine-apple.jpg');
+  const mango = createProduct('mango');
+  console.log(pineapple, mango);
+
+
+  function createProductWithDefaults(
+      name: string,
+      icon: string = 'generic-fruit.jpg'){
+
+    const id = getRandomInt(1000);
+    return {
+      id, name, icon
+    };
+  }
+
+  console.log(`${prefix} Optional Parameters`);
+  const pineapple2 = createProductWithDefaults('pineaple');
+  const mango2 = createProductWithDefaults('mango');
+  console.log(pineapple2, mango2);
+
+  function buildAddress(
+      street:string,
+      city:string,
+      ... restOfAddress:string[]){
+
+    const address = `Address { ${street} ${city} ${restOfAddress.join(", ")}`;
+    return address;
+  }
+
+  const someAddress = buildAddress(
+      '1 lois lane',
+      'smallville',
+      'apt 51',
+      'mystery country'
+  );
+
+  console.log(`${prefix} Rest Parameter`);
+  console.log(someAddress);
+
+  const displayProduct = function({id, name}: ProductType):void {
+
+    console.log(`${prefix} Destructuring parameters`);
+    console.log(`${prefix} id = ${id}, name = ${name}`);
+  }
+
+  const prod = getProductById(10);
+  if(prod){
+    displayProduct(prod);
+  }
 }

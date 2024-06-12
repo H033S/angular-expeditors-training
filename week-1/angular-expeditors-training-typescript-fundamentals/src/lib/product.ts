@@ -1,15 +1,45 @@
-import { Product } from './interfaces';
+import {Product} from "./interfaces";
 
-// This will act as the foundation for other Product type classes (FoodProduct, SportingProduct)
-abstract class ProductBase implements Product {
-  constructor(public id: number, public name: string, public icon: string) {}
-  validate(): boolean {
-    throw new Error('Not implemented');
-  }
+abstract class ProductBase
+    implements Product{
+
+  constructor(
+      public id: number,
+      public name: string,
+      public icon: string,
+  ){}
+
+  abstract validate(): boolean;
 }
 
-export class FoodProduct extends ProductBase {
+//Version # 1
+//+++++++++++++++++++++++++++++++++
+// class FoodProduct {
+//
+//   id: number;
+//   name: string;
+//   icon: string;
+//
+//   constructor(
+//       id: number,
+//       name:string,
+//       icon:string){
+//
+//     this.id = id;
+//     this.name = name;
+//     this.icon = icon;
+//   }
+// }
+
+//Version #2
+//+++++++++++++++++++++++++++++++
+export class FoodProduct
+    extends ProductBase{
+
+  //Auto Implemented Properties
   validate(): boolean {
     return !!this.id && !!this.name && !!this.icon;
   }
 }
+
+let product = new FoodProduct(1, 'Pizza Slice', 'icon.jpg');
