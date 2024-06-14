@@ -1,7 +1,10 @@
 import { productsURL } from "../lib";
 import {makeSolutionBuilderHost} from "ts-loader/dist/servicesHost";
+<<<<<<< HEAD
 import {types} from "sass";
 import Number = types.Number;
+=======
+>>>>>>> 980c2fed4b9fbfb427de78a3cb8d3a711bd09e36
 
 const prefix = '🐉';
 
@@ -11,6 +14,7 @@ type ProductType = {
   icon?: string;
 }
 
+<<<<<<< HEAD
 type DifferentType =
     string |
     number |
@@ -29,6 +33,8 @@ function main(){
   };
 }
 
+=======
+>>>>>>> 980c2fed4b9fbfb427de78a3cb8d3a711bd09e36
 export default async function updateOutput (id: string) {
 
   const products = await getProducts();
